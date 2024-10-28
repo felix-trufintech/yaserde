@@ -159,21 +159,21 @@ pub fn serialize(
         };
       }
 
-      if field.is_cdata() {
-        println!("cdata");
-        return quote! {
-          writer.write(::yaserde::__xml::writer::XmlEvent::characters("<![CDATA["))
-            .map_err(|e| e.to_string())?;
-        writer.write(::yaserde::__xml::writer::XmlEvent::characters(self.#label.as_deref().unwrap_or_default()))
-            .map_err(|e| e.to_string())?;
-        writer.write(::yaserde::__xml::writer::XmlEvent::characters("]]>"))
-            .map_err(|e| e.to_string())?;
-        }.into()
-      }
-
+      
       println!("not cdata");
       let label_name = field.renamed_label(root_attributes);
       let conditions = condition_generator(&label, &field);
+
+      if field.is_cdata() {
+        println!("cdata");
+        return quote! {
+            let start_event = ::yaserde::__xml::writer::XmlEvent::start_element(#label_name);
+            writer.write(start_event).map_err(|e| e.to_string())?;
+            writer.write(::yaserde::__xml::writer::XmlEvent::characters(format!("<![CDATA[{}]]>", self.#label.as_deref().unwrap_or_default()))).map_err(|e| e.to_string())?;
+            let end_event = ::yaserde::__xml::writer::XmlEvent::end_element();
+            writer.write(end_event).map_err(|e| e.to_string())?;
+        }.into()
+      }
 
       match field.get_type() {
         Field::FieldString
