@@ -162,9 +162,9 @@ pub fn serialize(
       if field.is_cdata() {
         println!("cdata");
         return quote! {
-          writer.write(::yaserde::__xml::writer::XmlEvent::characters("<![CDATA["))?;
-          writer.write(::yaserde::__xml::writer::XmlEvent::characters(&self.#label.to_string()))?;
-          writer.write(::yaserde::__xml::writer::XmlEvent::characters("]]>"))?;
+          writer.write(::yaserde::__xml::writer::XmlEvent::characters("<![CDATA[")).map_err(|e| e.to_string())?;?;
+          writer.write(::yaserde::__xml::writer::XmlEvent::characters(&self.#label.to_string())).map_err(|e| e.to_string())?;?;
+          writer.write(::yaserde::__xml::writer::XmlEvent::characters("]]>")).map_err(|e| e.to_string())?;?;
         }.into()
       }
 
