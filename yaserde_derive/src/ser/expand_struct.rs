@@ -159,6 +159,14 @@ pub fn serialize(
         };
       }
 
+      if field.is_cdata() {
+        return quote! {
+          writer.write(XmlEvent::Characters("<![CDATA["))?;
+          writer.write(XmlEvent::Characters(&self.#label.to_string()))?;
+          writer.write(XmlEvent::Characters("]]>"))?;
+        }.into()
+      }
+
       let label_name = field.renamed_label(root_attributes);
       let conditions = condition_generator(&label, &field);
 
