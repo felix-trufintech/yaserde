@@ -163,7 +163,7 @@ pub fn serialize(
         println!("cdata");
         return quote! {
           writer.write(XmlEvent::Characters("<![CDATA["))?;
-          writer.write_raw(&self.#label)?;
+          writer.write(XmlEvent::Characters(&self.#label.to_string()))?;
           writer.write(XmlEvent::Characters("]]>"))?;
         }.into()
       }
