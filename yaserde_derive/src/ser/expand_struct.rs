@@ -163,7 +163,7 @@ pub fn serialize(
         println!("cdata");
         return quote! {
           writer.write(::yaserde::__xml::writer::XmlEvent::characters("<![CDATA[")).map_err(|e| e.to_string())?;?;
-          writer.write(::yaserde::__xml::writer::XmlEvent::characters(&self.#label.to_string())).map_err(|e| e.to_string())?;?;
+          writer.write(::yaserde::__xml::writer::XmlEvent::characters(self.#label.as_deref().unwrap_or_default())).map_err(|e| e.to_string())?;?;
           writer.write(::yaserde::__xml::writer::XmlEvent::characters("]]>")).map_err(|e| e.to_string())?;?;
         }.into()
       }
