@@ -160,13 +160,15 @@ pub fn serialize(
       }
 
       if field.is_cdata() {
+        println!("cdata");
         return quote! {
           writer.write(XmlEvent::Characters("<![CDATA["))?;
-          writer.write(XmlEvent::Characters(&self.#label.to_string()))?;
+          writer.write_raw(&self.#label)?;
           writer.write(XmlEvent::Characters("]]>"))?;
         }.into()
       }
 
+      println!("not cdata");
       let label_name = field.renamed_label(root_attributes);
       let conditions = condition_generator(&label, &field);
 
@@ -360,3 +362,5 @@ pub fn serialize(
     generics,
   )
 }
+
+

@@ -71,7 +71,7 @@ impl<W: Write> Serializer<W> {
 
   pub fn new_from_writer(writer: W, config: &Config) -> Self {
     let mut emitter_config = EmitterConfig::new()
-      .cdata_to_characters(config.cdata_to_characters)
+      .cdata_to_characters(true)
       .perform_indent(config.perform_indent)
       .write_document_declaration(config.write_document_declaration);
 
@@ -119,7 +119,6 @@ impl<W: Write> Serializer<W> {
 pub struct Config {
   pub perform_indent: bool,
   pub write_document_declaration: bool,
-  pub cdata_to_characters: bool,
   pub indent_string: Option<String>,
 }
 
@@ -129,7 +128,6 @@ impl Default for Config {
       perform_indent: false,
       write_document_declaration: true,
       indent_string: None,
-      cdata_to_characters: true,
     }
   }
 }
