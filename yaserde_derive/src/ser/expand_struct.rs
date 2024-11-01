@@ -158,7 +158,6 @@ pub fn serialize(
           )),
         };
       }
-
       let label_name = field.renamed_label(root_attributes);
       let conditions = condition_generator(&label, &field);
 
